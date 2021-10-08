@@ -52,7 +52,7 @@ import org.springframework.lang.Nullable;
  * components (no more do individual objects need to read properties files,
  * for example). See chapters 4 and 11 of "Expert One-on-One J2EE Design and
  * Development" for a discussion of the benefits of this approach.
- *BeanFactory主要是一个应用程序组件的注册中心，并归集了应用程序组件的配置项，
+ * BeanFactory主要是一个应用程序组件的注册中心，并归集了应用程序组件的配置项，
  * 比如单个对象不用再亲自加载properties文件。
  *
  * <p>Note that it is generally better to rely on Dependency Injection
@@ -162,7 +162,7 @@ public interface BeanFactory {
 	 * <p>Translates aliases back to the corresponding canonical bean name.
 	 * 将别名转换回相应的规范bean名称。
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
-	 *如何在工厂实例中找不到bean将询问父工厂。
+	 * 如何在当前工厂实例中找不到bean将询问父工厂。
 	 * @param name the name of the bean to retrieve
 	 * @return an instance of the bean
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the specified name
@@ -172,12 +172,17 @@ public interface BeanFactory {
 
 	/**
 	 * Return an instance, which may be shared or independent, of the specified bean.
+	 * 返回指定bean的一个实例，该实例可以是共享的，也可以是独立的。
 	 * <p>Behaves the same as {@link #getBean(String)}, but provides a measure of type
 	 * safety by throwing a BeanNotOfRequiredTypeException if the bean is not of the
 	 * required type. This means that ClassCastException can't be thrown on casting
 	 * the result correctly, as can happen with {@link #getBean(String)}.
+	 * 与{@link #getBean(String)}基本相同，但是提供了类型安全的校验，
+	 * 当bean 工厂返回的bean不是要求的类型时抛出BeanNotOfRequiredTypeException。
 	 * <p>Translates aliases back to the corresponding canonical bean name.
+	 * 将别名转换回相应的规范bean名称。
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
+	 * 如何在当前工厂实例中找不到bean将询问父工厂。
 	 * @param name the name of the bean to retrieve
 	 * @param requiredType type the bean must match; can be an interface or superclass
 	 * @return an instance of the bean
@@ -189,8 +194,10 @@ public interface BeanFactory {
 
 	/**
 	 * Return an instance, which may be shared or independent, of the specified bean.
+	 * 返回指定bean的一个实例，该实例可以是共享的，也可以是独立的。
 	 * <p>Allows for specifying explicit constructor arguments / factory method arguments,
 	 * overriding the specified default arguments (if any) in the bean definition.
+	 * 允许指定显式构造函数参数/工厂方法参数，覆盖bean定义中指定的默认参数(如果有的话)
 	 * @param name the name of the bean to retrieve
 	 * @param args arguments to use when creating a bean instance using explicit arguments
 	 * (only applied when creating a new instance as opposed to retrieving an existing one)
@@ -205,10 +212,13 @@ public interface BeanFactory {
 
 	/**
 	 * Return the bean instance that uniquely matches the given object type, if any.
+	 * 返回与给定对象类型(如果有的话)唯一匹配的bean实例。
 	 * <p>This method goes into {@link ListableBeanFactory} by-type lookup territory
 	 * but may also be translated into a conventional by-name lookup based on the name
 	 * of the given type. For more extensive retrieval operations across sets of beans,
 	 * use {@link ListableBeanFactory} and/or {@link BeanFactoryUtils}.
+	 * 该方法在{@link ListableBeanFactory}中使用by-typ模式检索bean，但也可以基于类名按照by-name模式检索bean。
+	 * 更多有关bean集合中的检索操作可查阅{@link ListableBeanFactory}和{@link BeanFactoryUtils}。
 	 * @param requiredType type the bean must match; can be an interface or superclass
 	 * @return an instance of the single bean matching the required type
 	 * @throws NoSuchBeanDefinitionException if no bean of the given type was found
@@ -221,12 +231,16 @@ public interface BeanFactory {
 
 	/**
 	 * Return an instance, which may be shared or independent, of the specified bean.
+	 * 返回指定bean的一个实例，该实例可以是共享的，也可以是独立的。
 	 * <p>Allows for specifying explicit constructor arguments / factory method arguments,
 	 * overriding the specified default arguments (if any) in the bean definition.
+	 * 允许指定显式构造函数参数/工厂方法参数，覆盖bean定义中指定的默认参数(如果有的话)
 	 * <p>This method goes into {@link ListableBeanFactory} by-type lookup territory
 	 * but may also be translated into a conventional by-name lookup based on the name
 	 * of the given type. For more extensive retrieval operations across sets of beans,
 	 * use {@link ListableBeanFactory} and/or {@link BeanFactoryUtils}.
+	 * 该方法在{@link ListableBeanFactory}中使用by-typ模式检索bean，但也可以基于类名按照by-name模式检索bean。
+	 * 更多有关bean集合中的检索操作可查阅{@link ListableBeanFactory}和{@link BeanFactoryUtils}。
 	 * @param requiredType type the bean must match; can be an interface or superclass
 	 * @param args arguments to use when creating a bean instance using explicit arguments
 	 * (only applied when creating a new instance as opposed to retrieving an existing one)
@@ -242,6 +256,7 @@ public interface BeanFactory {
 	/**
 	 * Return a provider for the specified bean, allowing for lazy on-demand retrieval
 	 * of instances, including availability and uniqueness options.
+	 * 返回指定bean的提供程序，允许延迟按需检索实例，包括可用性和惟一性选项。
 	 * @param requiredType type the bean must match; can be an interface or superclass
 	 * @return a corresponding provider handle
 	 * @since 5.1
@@ -252,11 +267,15 @@ public interface BeanFactory {
 	/**
 	 * Return a provider for the specified bean, allowing for lazy on-demand retrieval
 	 * of instances, including availability and uniqueness options.
-	 * @param requiredType type the bean must match; can be a generic type declaration.
+	 * 返回指定bean的提供程序，允许延迟按需检索实例，包括可用性和惟一性选项。
+	 * @param requiredType type the bean must match; can be a generic type declaration（可以是泛型声明）.
 	 * Note that collection types are not supported here, in contrast to reflective
 	 * injection points. For programmatically retrieving a list of beans matching a
 	 * specific type, specify the actual bean type as an argument here and subsequently
 	 * use {@link ObjectProvider#orderedStream()} or its lazy streaming/iteration options.
+	 * 注意，与反射注入点不同，这里不支持集合类型。
+	 * 要以编程方式检索与特定类型匹配的bean列表，请在此处指定实际bean类型作为参数，
+	 * 然后使用{@link ObjectProvider#orderedStream()}或其延迟加载流/迭代选项。
 	 * @return a corresponding provider handle
 	 * @since 5.1
 	 * @see ObjectProvider#iterator()
