@@ -22,11 +22,13 @@ import org.springframework.lang.Nullable;
 
 /**
  * The root interface for accessing a Spring bean container.
+ * 访问spring容器的根接口。
  *
  * <p>This is the basic client view of a bean container;
  * further interfaces such as {@link ListableBeanFactory} and
  * {@link org.springframework.beans.factory.config.ConfigurableBeanFactory}
  * are available for specific purposes.
+ * 这是bean容器的一个基本视图，针对特定目的可使用ListableBeanFactory和ConfigurableBeanFactory。
  *
  * <p>This interface is implemented by objects that hold a number of bean definitions,
  * each uniquely identified by a String name. Depending on the bean definition,
@@ -37,18 +39,29 @@ import org.springframework.lang.Nullable;
  * depends on the bean factory configuration: the API is the same. Since Spring
  * 2.0, further scopes are available depending on the concrete application
  * context (e.g. "request" and "session" scopes in a web environment).
+ * 该接口由包含多个bean定义的对象实现，每个bean定义由String类型的名称唯一标识。
+ * 依据bean定义，该接口实现将返回一个bean的独立实例（原型模式），
+ * 或者单独的共享实例（这是Singleton设计模式的一个更好的替代方案，尽是工厂范围内的一个单例）。
+ * 根据bean factory中的配置返回不同类型的bean实例（构建bean的API都是一样的）。
+ * 从Spring 2.0开始，在一些应用场景中可以使用更加精准的bean 作用域可用，
+ * 比如在web 应用环境下的"request"和"session"作用域。
+ *
  *
  * <p>The point of this approach is that the BeanFactory is a central registry
  * of application components, and centralizes configuration of application
  * components (no more do individual objects need to read properties files,
  * for example). See chapters 4 and 11 of "Expert One-on-One J2EE Design and
  * Development" for a discussion of the benefits of this approach.
+ *BeanFactory主要是一个应用程序组件的注册中心，并归集了应用程序组件的配置项，
+ * 比如单个对象不用再亲自加载properties文件。
  *
  * <p>Note that it is generally better to rely on Dependency Injection
  * ("push" configuration) to configure application objects through setters
  * or constructors, rather than use any form of "pull" configuration like a
  * BeanFactory lookup. Spring's Dependency Injection functionality is
  * implemented using this BeanFactory interface and its subinterfaces.
+ * 注意使用setter和constructor的push模式比使用像BeanFactory查找一样的pull模式更好。
+ * Spring的依赖注入功能被BeanFactory接口及其子接口实现。
  *
  * <p>Normally a BeanFactory will load bean definitions stored in a configuration
  * source (such as an XML document), and use the {@code org.springframework.beans}
@@ -57,15 +70,25 @@ import org.springframework.lang.Nullable;
  * constraints on how the definitions could be stored: LDAP, RDBMS, XML,
  * properties file, etc. Implementations are encouraged to support references
  * amongst beans (Dependency Injection).
+ * 通常BeanFactory加载配置源（比如XML文档）中的bean定义，
+ * 然后使用{@code org.springframework.beans}包配置bean对象。
+ * 然而有时候仅在需要的时候才创建bean对象返回。
+ * 对于如何存储bean定义没有限制,LDAP、RDBMS、XML、properties文件等都可以。
+ * 支持bean之间的引用的接口实现是被鼓励的（注入依赖）。
+ *
  *
  * <p>In contrast to the methods in {@link ListableBeanFactory}, all of the
  * operations in this interface will also check parent factories if this is a
  * {@link HierarchicalBeanFactory}. If a bean is not found in this factory instance,
  * the immediate parent factory will be asked. Beans in this factory instance
  * are supposed to override beans of the same name in any parent factory.
+ * 与 {@link ListableBeanFactory}不同，在{@link HierarchicalBeanFactory}接口中的所有操作也将检查其父接口。
+ * 如果bean未在接口实例中发现，其将检索直接父接口。
+ * 这个工厂实例中的bean应该覆盖任何父工厂中同名的bean。
  *
  * <p>Bean factory implementations should support the standard bean lifecycle interfaces
  * as far as possible. The full set of initialization methods and their standard order is:
+ * Bean factory 实现要尽可能的支持标准的bean生命周期接口。
  * <ol>
  * <li>BeanNameAware's {@code setBeanName}
  * <li>BeanClassLoaderAware's {@code setBeanClassLoader}
@@ -121,17 +144,25 @@ public interface BeanFactory {
 	 * beans <i>created</i> by the FactoryBean. For example, if the bean named
 	 * {@code myJndiObject} is a FactoryBean, getting {@code &myJndiObject}
 	 * will return the factory, not the instance returned by the factory.
+	 * 用于解除对{@link FactoryBean}实例的引用，区分被FactoryBean创造的bean。
+	 * 比如一个FactoryBean的名称是{@code myJndiObject}，
+	 * 使用{@code &myJndiObject}将返回该bean工厂，而不是bean工厂返回的实例。
 	 */
 	String FACTORY_BEAN_PREFIX = "&";
 
 
 	/**
 	 * Return an instance, which may be shared or independent, of the specified bean.
+	 * 返回指定bean的一个实例，该实例可以是共享的，也可以是独立的。
 	 * <p>This method allows a Spring BeanFactory to be used as a replacement for the
 	 * Singleton or Prototype design pattern. Callers may retain references to
 	 * returned objects in the case of Singleton beans.
+	 * 该方法允许使用Spring BeanFactory来替代Singleton或Prototype设计模式。
+	 * 在Singleton bean的情况下，调用者可能保留对返回对象的引用。
 	 * <p>Translates aliases back to the corresponding canonical bean name.
+	 * 将别名转换回相应的规范bean名称。
 	 * <p>Will ask the parent factory if the bean cannot be found in this factory instance.
+	 *如何在工厂实例中找不到bean将询问父工厂。
 	 * @param name the name of the bean to retrieve
 	 * @return an instance of the bean
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the specified name
