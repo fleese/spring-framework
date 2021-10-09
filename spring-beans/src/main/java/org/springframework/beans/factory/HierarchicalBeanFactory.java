@@ -21,10 +21,13 @@ import org.springframework.lang.Nullable;
 /**
  * Sub-interface implemented by bean factories that can be part
  * of a hierarchy.
+ *  作为层次型bean工厂需要实现的子接口。
  *
  * <p>The corresponding {@code setParentBeanFactory} method for bean
  * factories that allow setting the parent in a configurable
  * fashion can be found in the ConfigurableBeanFactory interface.
+ *在ConfigurableBeanFactory接口中可以找到bean工厂的相应{@code setParentBeanFactory}
+ * 方法，该方法允许以可配置的方式设置父组件。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -35,6 +38,7 @@ public interface HierarchicalBeanFactory extends BeanFactory {
 
 	/**
 	 * Return the parent bean factory, or {@code null} if there is none.
+	 * 返回父bean工厂，如果没有返回{@code null}
 	 */
 	@Nullable
 	BeanFactory getParentBeanFactory();
@@ -42,8 +46,10 @@ public interface HierarchicalBeanFactory extends BeanFactory {
 	/**
 	 * Return whether the local bean factory contains a bean of the given name,
 	 * ignoring beans defined in ancestor contexts.
+	 * 返回本地bean工厂是否包含给定名称的bean，忽略在祖先上下文中定义的bean。
 	 * <p>This is an alternative to {@code containsBean}, ignoring a bean
 	 * of the given name from an ancestor bean factory.
+	 * 这是{@code containsBean}的一个替代方法，忽略来自祖先bean工厂的给定名称的bean。
 	 * @param name the name of the bean to query
 	 * @return whether a bean with the given name is defined in the local factory
 	 * @see BeanFactory#containsBean
