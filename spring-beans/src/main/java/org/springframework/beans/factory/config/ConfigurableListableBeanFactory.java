@@ -159,4 +159,8 @@ public interface ConfigurableListableBeanFactory
 	 */
 	void preInstantiateSingletons() throws BeansException;
 
+	@Override
+	default Object initializeBean(Object existingBean, String beanName) throws BeansException {
+		return null;
+	}
 }

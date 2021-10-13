@@ -45,6 +45,8 @@ import org.springframework.util.ObjectUtils;
  * Descriptor for a specific dependency that is about to be injected.
  * Wraps a constructor parameter, a method parameter or a field,
  * allowing unified access to their metadata.
+ * 即将被注入的特定依赖项的描述符。包装构造函数参数、方法参数或字段，
+ * 允许统一访问它们的元数据。
  *
  * @author Juergen Hoeller
  * @since 2.5
